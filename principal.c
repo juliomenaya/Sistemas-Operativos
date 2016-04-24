@@ -28,14 +28,14 @@ int main(int argc, char* argv[]){
 	procs=num_procs(archivo);
 	proc=guarda(procs,archivo);
 	procesador(proc,procs);
-	printf("id \ttama \t inicio\n ");
-	for(i=0;i<procs;i++){
+	//printf("id \ttama \t inicio\n ");
+	/*for(i=0;i<procs;i++){
 		printf("%d \t%d \t %d\n",proc[i].id,proc[i].tama,proc[i].inicio);
-	}
-	for(i=1500;i<1542;i++){
+	}*/
+	/*for(i=1500;i<1542;i++){
 		
 		printf("\nLocalidad[%d] = %d\n",i,memoria[i]);
-	}
+	}*/
 	fclose(archivo);
 	return 0;
 }
@@ -47,7 +47,7 @@ int num_procs(FILE *archivo){
 			tama++;
 		}
 	}
-	return tama+1;
+	return tama;
 }
 
 Proceso* guarda(int proc,FILE *archivo){
@@ -66,6 +66,7 @@ Proceso* guarda(int proc,FILE *archivo){
 
 void procesador(Proceso *procs,int num_procs){
 	int i=0;
+	int k;
 	for(i=0;i<num_procs;i++){
 		if(procs[i].tama!=0){
 			if(procs[i].tama<=disponible){
@@ -79,14 +80,25 @@ void procesador(Proceso *procs,int num_procs){
 			}else{
 				printf("\nNo hay memoria suficiente");
 				printf("\nEl proceso %d entro en cola\n",procs[i].id);
+				printf("\nSituacion de la memoria\n");
+				printf("id \ttama \t inicio\n ");
+				for(k=0;k<num_procs;k++){
+					printf("%d \t%d \t %d\n",procs[k].id,procs[k].tama,procs[k].inicio);
+				}
 				//cola
 			}
 		}else{
 			disponible+=libera(procs[i]);
 			printf("\nEl proceso %d ha terminado, ",procs[i].id);
 			printf("memoria restante %d\n",disponible);
+			//revisar procesos en cola y asignar
 		}	
 		
+	}
+	printf("\nSe atendio a todos los procesos\n");
+	printf("id \ttama \t inicio\n ");
+	for(k=0;k<num_procs;k++){
+		printf("%d \t%d \t %d\n",procs[k].id,procs[k].tama,procs[k].inicio);
 	}
 	return;
 }
